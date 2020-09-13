@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'bootstrap/scss/bootstrap.scss';
 import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
+import Dashboard from './components/Dashboard';
+import DisclaimerModal from './components/DisclaimerModal'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <DisclaimerModal show={true}/>
+    <Dashboard/>
   </React.StrictMode>,
   document.getElementById('root')
 );

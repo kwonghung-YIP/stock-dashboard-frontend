@@ -1,0 +1,29 @@
+.card.stock-card {
+    width: 300rem;
+}
+
+.recharts-wrapper {
+    font-size: 10px;
+}
+
+.recharts-custom-tooltip {
+    margin: 0px;
+    padding: 2px 5px 2px 5px; 
+    background-color: rgb(255, 255, 255); 
+    border: 1px solid rgb(204, 204, 204); 
+    white-space: nowrap;
+}
+
+.recharts-custom-tooltip span.price-up {
+    color: green;
+    font-weight: bold;
+}
+
+.recharts-custom-tooltip span.price-down {
+    color: red;
+    font-weight: bold;
+}
+
+.recharts-text.recharts-label.prev-close-tag {
+    font-weight: bold;
+}
