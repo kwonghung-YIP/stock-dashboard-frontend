@@ -2,6 +2,22 @@
     width: 300rem;
 }
 
+p.card-text.quote span {
+    margin-right: 5px;
+}
+
+p.card-text.quote span:first-of-type {
+    font-weight: bold;
+}
+
+p.card-text.price-up {
+    color: green;
+}
+
+p.card-text.price-down {
+    color: red;
+}
+
 .recharts-wrapper {
     font-size: 10px;
 }

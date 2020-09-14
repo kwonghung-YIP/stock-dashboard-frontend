@@ -1,7 +1,8 @@
+import { faArrowAltCircleDown, faArrowAltCircleUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 import React from 'react'
 import { Card } from 'react-bootstrap';
-import BootstrapIcon from './BootstrapIcon';
 
 function RealtimeQuotePanel(props) {
 
@@ -14,16 +15,16 @@ function RealtimeQuotePanel(props) {
     } else {
         let icon, className;
         if (quote.latestPrice >= quote.previousClose) {
-            icon = <BootstrapIcon filename="caret-up"/>;
+            icon = faArrowAltCircleUp;
             className = "price-up";
         } else {
-            icon = <BootstrapIcon filename="caret-down"/>;
+            icon = faArrowAltCircleDown;
             className = "price-down";
         }
         return (
             <>
             <Card.Text className={`quote ${className}`}>
-                {icon}
+                <FontAwesomeIcon icon={icon}/>
                 <span>{quote.latestPrice.toFixed(2)}</span>
                 <span>{quote.change>0?"+":""}{quote.change.toFixed(2)}</span>
                 <span>({quote.changePercent.toFixed(2)}%)</span>
