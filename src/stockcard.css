@@ -1,5 +1,7 @@
-.card.stock-card {
-    width: 300rem;
+.stock-card {
+    width: 400px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 p.card-text.quote span {
