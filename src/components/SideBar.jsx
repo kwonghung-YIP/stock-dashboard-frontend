@@ -2,14 +2,17 @@ import React, { useContext, useState } from 'react'
 import '../sidebar.css'
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import { ConfigContext } from './Utils';
+import moment from 'moment';
 
 function SideBar(props) {
     const [show,setShow] = useState(props.show);
 
-    const checkRefresh = (e) => {
+    const config = useContext(ConfigContext);
+
+    const updateConfig = (e) => {
         //console.log(e.target.checked);
         const newConfig = {};
-        Object.assign(newConfig,props.config);
+        Object.assign(newConfig,config);
         if (e.target.checked) {
             newConfig.refreshInterval = 2;
         } else {
@@ -43,15 +46,31 @@ function SideBar(props) {
                             </InputGroup>
                         </Form.Group>
 
-                        <Form.Group>
-                            <Form.Label>Auto Refresh Stock Quote</Form.Label>
-                            <InputGroup>
-                                <InputGroup.Prepend>
-                                    <InputGroup.Checkbox onChange={checkRefresh}/>
-                                </InputGroup.Prepend>
-                                <Form.Control type="text" placeholder="interval in sec"/>
-                            </InputGroup>
-                        </Form.Group>
+                        <label htmlFor="refreshInterval">Auto Refresh Stock Quote</label>
+                        <InputGroup>
+                            <InputGroup.Prepend>
+                                <InputGroup.Checkbox onChange={updateConfig} checked={config.refreshInterval>0}/>
+                            </InputGroup.Prepend>
+                            <Form.Control type="number" id="refreshInterval" onChange={updateConfig} value={config.refreshInterval} placeholder="interval in sec"/>
+                            <InputGroup.Append>
+                                <InputGroup.Text>
+                                    sec
+                                </InputGroup.Text>
+                            </InputGroup.Append>
+                        </InputGroup>
+
+                        <label htmlFor="tradeDate">Sample Trade Date</label>
+                        <Form.Control type="Date" id="tradeDate" onChange={updateConfig} value={moment(config.tradeDate).format("YYYY-MM-DD")}/>
+
+                        <label htmlFor="apiHost">Backend API Host</label>
+                        <InputGroup>
+                            <InputGroup.Prepend>
+                                <InputGroup.Text>
+                                    https://
+                                </InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <Form.Control type="Text" id="apiHost" defaultValue={config.apiHost}/>
+                        </InputGroup>
                     </Form>
 
                 </nav> 

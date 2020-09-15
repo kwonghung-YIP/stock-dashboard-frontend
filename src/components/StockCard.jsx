@@ -5,6 +5,7 @@ import IntradayQuoteChart from './IntradayQuoteChart';
 import RealtimeQuotePanel from './RealtimeQuotePanel';
 import StockProfilePanel from './StockProfilePanel';
 import { ConfigContext } from './Utils';
+import { moment } from 'moment';
 
 function StockCard({symbol}) {
 
@@ -54,7 +55,7 @@ function StockCard({symbol}) {
         console.log("useEffect => fetchLatestQuote");
         if ( profile !== null && refreshInterval > 0 ) {
             const timerId = setInterval(() => {
-                fetchLatestQuote(symbol,apiHost,dispatch);
+                fetchLatestQuote(symbol,config.tradeDate,apiHost,dispatch);
             },refreshInterval*1000);
             return () => clearTimeout(timerId);
         }
@@ -122,9 +123,10 @@ async function fetchStockProfile(symbol,apiHost,dispatch) {
     }
 }
 
-async function fetchLatestQuote(symbol,apiHost,dispatch) {
+async function fetchLatestQuote(symbol,date,apiHost,dispatch) {
     try {
-        const response = await fetch(`https://${apiHost}/quote-demo?symbol=${symbol}&date=2020-09-04`);
+        const tradeDate = moment(date).format('YYYY-MM-DD');
+        const response = await fetch(`https://${apiHost}/quote-demo?symbol=${symbol}&date=${tradeDate}`);
         const json = await response.json();
         dispatch({type:"fetch/quote",payload:json});
     } catch (err) {
@@ -132,7 +134,7 @@ async function fetchLatestQuote(symbol,apiHost,dispatch) {
     }
 }
 
-async function initIntradayData(symbol,apiHost,dispatch) {
+async function initIntradayData(symbol,date,apiHost,dispatch) {
     try {
         const response = await fetch(`https://${apiHost}/intraday-init-demo?symbol=${symbol}&date=2020-09-04`);
         const json = await response.json();
