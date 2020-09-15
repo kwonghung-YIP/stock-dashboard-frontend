@@ -64,7 +64,7 @@ function StockCard({symbol}) {
     useEffect(() => {
         console.log("useEffect => initIntradayData");
         if ( profile !== null ) {
-            initIntradayData(symbol,apiHost,dispatch);
+            initIntradayData(symbol,config.tradeDate,apiHost,dispatch);
         }
     },[profile])
 
@@ -136,7 +136,8 @@ async function fetchLatestQuote(symbol,date,apiHost,dispatch) {
 
 async function initIntradayData(symbol,date,apiHost,dispatch) {
     try {
-        const response = await fetch(`https://${apiHost}/intraday-init-demo?symbol=${symbol}&date=2020-09-04`);
+        const tradeDate = moment(date).format('YYYY-MM-DD');
+        const response = await fetch(`https://${apiHost}/intraday-init-demo?symbol=${symbol}&date=${tradeDate}`);
         const json = await response.json();
         dispatch({type:"fetch/intraday-init",payload:json});
     } catch (err) {
