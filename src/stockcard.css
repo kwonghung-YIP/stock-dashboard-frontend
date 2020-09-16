@@ -1,7 +1,25 @@
+.card-list {
+    padding: 2rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
 .stock-card {
-    width: 400px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    min-width: 420px;
+    max-width: 550px;
+    margin-right: 0.5rem;
+    margin-bottom: 1rem;
+    translate: 1s;
+
+    border-radius: 12px;
+    box-shadow: 15px 15px 30px 0px rgba(40,40,40,0.5);
+}
+
+.stock-card:hover {
+    transform: translate(-2px,-2px);
+    box-shadow: 0px 0px 5px 7px rgb(216, 186, 18,0.7);
 }
 
 p.card-text.quote span {

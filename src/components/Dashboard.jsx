@@ -20,8 +20,32 @@ function Dashboard() {
             <div>
                 <h4><a href="https://iexcloud.io">Data provided by IEX Cloud</a></h4>
             </div>
-            <StockCard symbol="aapl"/>
-            <StockCard symbol="fb"/>
+            <section className="card-list">
+                <StockCard symbol="aapl"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+                <StockCard symbol="fb"/>
+            </section>
         </ConfigContext.Provider>
     )
 }
