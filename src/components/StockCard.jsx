@@ -97,10 +97,9 @@ function StockCard({symbol}) {
     
     return (
         <Card className="stock-card">
-            <Card.Header>{symbol}</Card.Header>
             <Card.Body>
                 <Card.Title>
-                    <StockProfilePanel profile={profile}/>
+                    <StockProfilePanel symbol={symbol} profile={profile}/>
                 </Card.Title>
                 <RealtimeQuotePanel quote={quote}/>
                 <IntradayQuoteChart

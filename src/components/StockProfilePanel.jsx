@@ -1,11 +1,11 @@
 import React from 'react'
 
 function StockProfilePanel(props) {
-    const { profile } = props;
+    const { symbol, profile } = props;
 
     if (profile===null) {
         return (
-            <span>Loading...</span>
+        <span>[{symbol}] loading profile...</span>
         )
     } else {
         return (

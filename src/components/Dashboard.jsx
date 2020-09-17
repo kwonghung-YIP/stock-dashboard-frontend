@@ -17,9 +17,10 @@ function Dashboard() {
     return (
         <ConfigContext.Provider value={config}>
             <SideBar setConfig={setConfig}/>
-            <div>
-                <h4><a href="https://iexcloud.io">Data provided by IEX Cloud</a></h4>
-            </div>
+            <section className="title">
+                <h2>Stock Quote Dashboard</h2>
+                <span><a href="https://iexcloud.io">Data provided by IEX Cloud</a></span>
+            </section>
             <section className="card-list">
                 <StockCard symbol="aapl"/>
                 <StockCard symbol="fb"/>
