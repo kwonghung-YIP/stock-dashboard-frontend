@@ -5,7 +5,7 @@ import IntradayQuoteChart from './IntradayQuoteChart';
 import RealtimeQuotePanel from './RealtimeQuotePanel';
 import StockProfilePanel from './StockProfilePanel';
 import { ConfigContext } from './Utils';
-import { moment } from 'moment';
+import moment from 'moment';
 
 function StockCard({symbol}) {
 
@@ -55,7 +55,8 @@ function StockCard({symbol}) {
         console.log("useEffect => fetchLatestQuote");
         if ( profile !== null && refreshInterval > 0 ) {
             const timerId = setInterval(() => {
-                fetchLatestQuote(symbol,config.tradeDate,apiHost,dispatch);
+                const tradeDate = moment(config.tradeDate).format('YYYY-MM-DD');
+                fetchLatestQuote(symbol,tradeDate,apiHost,dispatch);
             },refreshInterval*1000);
             return () => clearTimeout(timerId);
         }
@@ -64,7 +65,8 @@ function StockCard({symbol}) {
     useEffect(() => {
         console.log("useEffect => initIntradayData");
         if ( profile !== null ) {
-            initIntradayData(symbol,config.tradeDate,apiHost,dispatch);
+            const tradeDate = moment(config.tradeDate).format('YYYY-MM-DD');
+            initIntradayData(symbol,tradeDate,apiHost,dispatch);
         }
     },[profile])
 
@@ -122,9 +124,8 @@ async function fetchStockProfile(symbol,apiHost,dispatch) {
     }
 }
 
-async function fetchLatestQuote(symbol,date,apiHost,dispatch) {
+async function fetchLatestQuote(symbol,tradeDate,apiHost,dispatch) {
     try {
-        const tradeDate = moment(date).format('YYYY-MM-DD');
         const response = await fetch(`https://${apiHost}/quote-demo?symbol=${symbol}&date=${tradeDate}`);
         const json = await response.json();
         dispatch({type:"fetch/quote",payload:json});
@@ -133,9 +134,9 @@ async function fetchLatestQuote(symbol,date,apiHost,dispatch) {
     }
 }
 
-async function initIntradayData(symbol,date,apiHost,dispatch) {
+async function initIntradayData(symbol,tradeDate,apiHost,dispatch) {
     try {
-        const tradeDate = moment(date).format('YYYY-MM-DD');
+        //const tradeDate = moment(date).format('YYYY-MM-DD');
         const response = await fetch(`https://${apiHost}/intraday-init-demo?symbol=${symbol}&date=${tradeDate}`);
         const json = await response.json();
         dispatch({type:"fetch/intraday-init",payload:json});
