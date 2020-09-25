@@ -14,7 +14,7 @@ function SideBar(props) {
         const newConfig = {};
         Object.assign(newConfig,config);
         if (e.target.checked) {
-            newConfig.refreshInterval = 2;
+            newConfig.refreshInterval = 1;
         } else {
             newConfig.refreshInterval = 0;
         }

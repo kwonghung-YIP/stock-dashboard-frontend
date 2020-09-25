@@ -9,9 +9,9 @@ function Dashboard() {
     //const [refreshInterval,setRefreshInterval] = useState(2);
 
     const [ config, setConfig ] = useState({
-        tradeDate: moment("2020-09-04","YYYY-MM-DD"),
-        apiHost: "192.168.1.151:8080",
-        refreshInterval: 2
+        tradeDate: moment("2020-09-24","YYYY-MM-DD"),
+        apiHost: "192.168.1.154:8080",
+        refreshInterval: 1
     });
 
     return (
@@ -23,29 +23,35 @@ function Dashboard() {
             </section>
             <section className="card-list">
                 <StockCard symbol="aapl"/>
+                <StockCard symbol="msft"/>
+                <StockCard symbol="amzn"/>
+                <StockCard symbol="googl"/>
                 <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
-                <StockCard symbol="fb"/>
+                <StockCard symbol="baba"/>
+                <StockCard symbol="v"/>
+                <StockCard symbol="jnj"/>
+                <StockCard symbol="wmt"/>
+                <StockCard symbol="tsm"/>
+                <StockCard symbol="pg"/>
+                <StockCard symbol="ma"/>
+                <StockCard symbol="jpm"/>
+                <StockCard symbol="unh"/>
+                <StockCard symbol="hd"/>
+                <StockCard symbol="tsla"/>
+                <StockCard symbol="intc"/>
+                <StockCard symbol="nvda"/>
+                <StockCard symbol="vz"/>
+                <StockCard symbol="t"/>
+                <StockCard symbol="dis"/>
+                <StockCard symbol="adbe"/>
+                <StockCard symbol="pypl"/>
+                <StockCard symbol="mrk"/>
+                <StockCard symbol="pfe"/>
+                <StockCard symbol="bac"/>
+                <StockCard symbol="ko"/>
+                <StockCard symbol="csco"/>
+                <StockCard symbol="cmcsa"/>
+                <StockCard symbol="pep"/>
             </section>
         </ConfigContext.Provider>
     )

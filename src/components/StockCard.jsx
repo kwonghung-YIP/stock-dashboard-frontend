@@ -4,7 +4,7 @@ import '../stockcard.css'
 import IntradayQuoteChart from './IntradayQuoteChart';
 import RealtimeQuotePanel from './RealtimeQuotePanel';
 import StockProfilePanel from './StockProfilePanel';
-import { ConfigContext } from './Utils';
+import { ConfigContext, randomDelay } from './Utils';
 import moment from 'moment';
 
 function StockCard({symbol}) {
@@ -57,7 +57,7 @@ function StockCard({symbol}) {
             const timerId = setInterval(() => {
                 const tradeDate = moment(config.tradeDate).format('YYYY-MM-DD');
                 fetchLatestQuote(symbol,tradeDate,apiHost,dispatch);
-            },refreshInterval*1000);
+            },refreshInterval*1000 + randomDelay(20));
             return () => clearTimeout(timerId);
         }
     },[profile,refreshInterval])
@@ -89,10 +89,10 @@ function StockCard({symbol}) {
                 if (intradayRef.current.length > 0) {
                     since = intradayRef.current[intradayRef.current.length -1].timestamp;
                 } else {
-                    since = '2020-09-04T09:30';
+                    since = `${moment(config.tradeDate).format('YYYY-MM-DD')}T09:30`;
                 }
                 fetchIntradayDelta(symbol,since,apiHost,dispatch);
-            },refreshInterval*1000);
+            },refreshInterval*1000 + randomDelay(20));
             return () => clearTimeout(timerId);
         }
     },[previous,refreshInterval])
