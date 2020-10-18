@@ -37,7 +37,13 @@ function StockCard({symbol}) {
                 intraday: action.payload.quote
             };
         } else if (action.type === "fetch/intraday-delta") {
-            newState = { ...state, intraday: [ ...state.intraday, ...action.payload] };
+            if (Array.isArray(action.payload)) {
+                if (action.payload.length > 0) {
+                    newState = { ...state, intraday: [ ...state.intraday, ...action.payload] };
+                } else if (action.since === `${moment(config.tradeDate).format('YYYY-MM-DD')}T15:59:00`) {
+                    newState = { ...state, intraday: [] };
+                }
+            }
         }
         return newState;
     };
@@ -89,8 +95,9 @@ function StockCard({symbol}) {
                 if (intradayRef.current.length > 0) {
                     since = intradayRef.current[intradayRef.current.length -1].timestamp;
                 } else {
-                    since = `${moment(config.tradeDate).format('YYYY-MM-DD')}T09:30`;
+                    since = `${moment(config.tradeDate).format('YYYY-MM-DD')}T09:30:00`;
                 }
+                //console.log(typeof(since) + ',' + since);
                 fetchIntradayDelta(symbol,since,apiHost,dispatch);
             },refreshInterval*1000 + randomDelay(20));
             return () => clearTimeout(timerId);
@@ -149,9 +156,7 @@ async function fetchIntradayDelta(symbol,since,apiHost,dispatch) {
     try {
         const response = await fetch(`https://${apiHost}/intraday-delta-demo?symbol=${symbol}&since=${since}`);
         const json = await response.json();
-        if (Array.isArray(json) && json.length>0) {
-            dispatch({type:"fetch/intraday-delta",payload:json});
-        }        
+        dispatch({type:"fetch/intraday-delta",payload:json,since:since});
     } catch (err) {
         console.log("fetchIntradayDelta error:"+err);
     }

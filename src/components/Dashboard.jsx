@@ -10,7 +10,7 @@ function Dashboard() {
 
     const [ config, setConfig ] = useState({
         tradeDate: moment("2020-09-24","YYYY-MM-DD"),
-        apiHost: "192.168.1.154:8080",
+        apiHost: "192.168.1.160:8080",
         refreshInterval: 1
     });
 
@@ -25,6 +25,7 @@ function Dashboard() {
                 <StockCard symbol="aapl"/>
                 <StockCard symbol="msft"/>
                 <StockCard symbol="amzn"/>
+                {/*
                 <StockCard symbol="googl"/>
                 <StockCard symbol="fb"/>
                 <StockCard symbol="baba"/>
@@ -52,6 +53,7 @@ function Dashboard() {
                 <StockCard symbol="csco"/>
                 <StockCard symbol="cmcsa"/>
                 <StockCard symbol="pep"/>
+                */}
             </section>
         </ConfigContext.Provider>
     )

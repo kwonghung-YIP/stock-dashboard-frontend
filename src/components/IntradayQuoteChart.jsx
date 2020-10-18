@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, ReferenceLine, Label, CartesianGrid, Tooltip, BarChart, Bar } from 'recharts';
 import moment from 'moment';
 
@@ -8,36 +8,91 @@ function IntradayQuoteChart(props) {
     const chartWidth = 400;
     const xAxisHeight = 20;
     const yAxisWidth = 45;   
-    
-    let [min,max,offset,prev] = [-1,1,0.5,0];
-    const data = [];
-    if ( previous !== null && intraday !== null && intraday.length > 0 ) {
-        prev = previous.close;
-        max = prev;
-        min = prev;
-        intraday.map( ( quote,i ) => {
-            const point = {
-                date: new Date(quote.timestamp).getTime(),
-                price: quote.close,
-                volumeUp: 0,
-                volumeDown: 0
-            }
-            if ( quote.close >= prev ) {
-                point.volumeUp = quote.volume;
-            } else {
-                point.volumeDown = quote.volume;
-            }
-            max = point.price !== null && point.price > max ? point.price : max;
-            min = point.price !== null && point.price < min ? point.price : min;
-            data.push(point);
-        });
-        offset = ( prev - min )/( max - min );
-    }
 
+    const initData = {
+        points: [],
+        offset: 0.5,
+        max: null,
+        min: null
+    };
+
+    const [ data, setData ] = useState(initData);
+
+    useEffect(() => {
+        if (previous !== null && intraday !==null) {
+            if (intraday.length > data.points.length) {
+                const delta = [];
+                for (let i=data.points.length;i<intraday.length;i++) {
+                    const quote = intraday[i];
+                    const point = {
+                        date: new Date(quote.timestamp).getTime(),
+                        price: (quote.close === null?previous.close:quote.close),
+                        volume: quote.volume,
+                        volumeUp: 0,
+                        volumeDown: 0
+                    }
+                    if ( quote.close >= previous.close ) {
+                        point.volumeUp = quote.volume;
+                    } else {
+                        point.volumeDown = quote.volume;
+                    }
+                    delta.push(point);                    
+                }
+                const newpoints = [...data.points, ...delta];
+
+                const max = newpoints.reduce((max,pt,i) => {
+                    return ( i === 0 )?pt:(pt.price>max.price?pt:max);
+                });
+                const min = newpoints.reduce((min,pt,i) => {
+                    return ( i === 0 )?pt:(pt.price<min.price?pt:min);
+                });
+                const offset = ( previous.close - min.price )/( max.price - min.price );
+                console.log(`${symbol}-max:${max.date},${max.price}-min:${min.date},${min.price}`);
+
+                setData({
+                    points: newpoints,
+                    offset: offset,
+                    max: max,
+                    min: min
+                });
+            } else if (intraday.length === 0) {
+                setData(initData);
+            }
+        }
+        /*const newdata = [];
+        if ( previous !== null && intraday !== null && intraday.length > 0 ) {
+            console.log( data.length + "," + intraday.length );
+
+            let max = previous.close;
+            let min = previous.close;
+            intraday.map( ( quote,i ) => {
+                const point = {
+                    date: new Date(quote.timestamp).getTime(),
+                    price: quote.close,
+                    volume: quote.volume,
+                    volumeUp: 0,
+                    volumeDown: 0
+                }
+                if ( quote.close >= previous.close ) {
+                    point.volumeUp = quote.volume;
+                } else {
+                    point.volumeDown = quote.volume;
+                }
+                max = point.price !== null && point.price > max ? point.price : max;
+                min = point.price !== null && point.price < min ? point.price : min;
+                newdata.push(point);
+            });
+            setOffset(( prev - min )/( max - min ));
+            console.log(`${symbol} - newdata:${newdata.length}`);
+            setData(newdata);
+        }*/
+    }, [previous,intraday]);
+
+    const prev = previous!=null ? previous.close : 0;
     return (
         <>
             <AreaChart width={chartWidth} height={150} margin={{top:0,bottom:2,left:0,right:55}} 
-                data={data} baseValue={prev} syncId={`${symbol}-chart`}>
+                data={data.points} baseValue={prev} syncId={`${symbol}-chart`}>
                 <XAxis dataKey="date"
                     type="number"
                     domain={['dataMin', 'dataMax']} 
@@ -57,8 +112,8 @@ function IntradayQuoteChart(props) {
                 <Tooltip content={<PriceToolTip prevClose={prev}/>} />
                 <defs>
                     <linearGradient id={`splitColor-${symbol}`} x1="0" y1="1" x2="0" y2="0" >
-                        <stop offset={offset} stopColor="red" stopOpacity={1} />
-                        <stop offset={offset} stopColor="green" stopOpacity={1} />
+                        <stop offset={data.offset} stopColor="red" stopOpacity={1} />
+                        <stop offset={data.offset} stopColor="green" stopOpacity={1} />
                     </linearGradient>
                 </defs>
                 <ReferenceLine y={prev} stroke="red" strokeDasharray="3 3">
@@ -73,7 +128,7 @@ function IntradayQuoteChart(props) {
             </AreaChart>
 
             <BarChart width={chartWidth} height={100} margin={{top:0,bottom:2,left:0,right:55}}
-                data={data} syncId={`${symbol}-chart`}>
+                data={data.points} syncId={`${symbol}-chart`}>
                 <XAxis dataKey="date"
                     type="number"
                     domain={['dataMin', 'dataMax']}
@@ -81,14 +136,19 @@ function IntradayQuoteChart(props) {
                     tickFormatter={(timeValue) => {
                         return moment(timeValue).format('H:m');
                     }}
-                    height={xAxisHeight} padding={{ left: 5, right: 5 }} />
+                    height={xAxisHeight} padding={{ left: 5, right: 5 }}>
+                    <Label value={`${data.offset},${data.max},${data.min}`}/>
+                </XAxis>
                 <YAxis 
-                    tickFormatter={(value) => (value / 1000).toFixed(2) + "k"} 
+                    tickFormatter={(value) => (value / 1000).toFixed(0) + "k"} 
                     width={yAxisWidth} padding={{top:5,bottom:5}}/>
                 <CartesianGrid />
                 <Tooltip content={<VolumeToolTip prevClose={prev}/>} />
-                <Bar dataKey="volumeDown" stackId="vol" fill="red" isAnimationActive={false} />
-                <Bar dataKey="volumeUp" stackId="vol" fill="green" isAnimationActive={false} />
+                <Bar id={`bar-vol-down-${symbol}`} dataKey="volumeDown" stackId="vol" fill="red" isAnimationActive={false} />
+                <Bar id={`bar-vol-up-${symbol}`} dataKey="volumeUp" stackId="vol" fill="green" isAnimationActive={false} />
+                {/*
+                <Bar dataKey="volume" stackId="vol" fill="grey" isAnimationActive={false} />
+                */}
             </BarChart>
         </>
     );
