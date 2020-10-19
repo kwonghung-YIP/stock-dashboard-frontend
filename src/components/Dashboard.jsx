@@ -25,7 +25,6 @@ function Dashboard() {
                 <StockCard symbol="aapl"/>
                 <StockCard symbol="msft"/>
                 <StockCard symbol="amzn"/>
-                {/*
                 <StockCard symbol="googl"/>
                 <StockCard symbol="fb"/>
                 <StockCard symbol="baba"/>
@@ -53,7 +52,6 @@ function Dashboard() {
                 <StockCard symbol="csco"/>
                 <StockCard symbol="cmcsa"/>
                 <StockCard symbol="pep"/>
-                */}
             </section>
         </ConfigContext.Provider>
     )

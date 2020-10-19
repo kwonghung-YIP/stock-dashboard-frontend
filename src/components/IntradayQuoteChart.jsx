@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AreaChart, Area, XAxis, YAxis, ReferenceLine, Label, CartesianGrid, Tooltip, BarChart, Bar } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, ReferenceLine, Label, CartesianGrid, Tooltip, BarChart, Bar, Line, LineChart } from 'recharts';
 import moment from 'moment';
 
 function IntradayQuoteChart(props) {
@@ -22,14 +22,18 @@ function IntradayQuoteChart(props) {
         if (previous !== null && intraday !==null) {
             if (intraday.length > data.points.length) {
                 const delta = [];
+                let lastPrice = data.points.length>0?data.points[data.points.length-1].price:previous.close;
                 for (let i=data.points.length;i<intraday.length;i++) {
                     const quote = intraday[i];
                     const point = {
                         date: new Date(quote.timestamp).getTime(),
-                        price: (quote.close === null?previous.close:quote.close),
+                        price: (quote.close !== null)?quote.close:lastPrice,
                         volume: quote.volume,
                         volumeUp: 0,
                         volumeDown: 0
+                    }
+                    if ( quote.close !== null ) {
+                        lastPrice = quote.close;
                     }
                     if ( quote.close >= previous.close ) {
                         point.volumeUp = quote.volume;
@@ -47,7 +51,7 @@ function IntradayQuoteChart(props) {
                     return ( i === 0 )?pt:(pt.price<min.price?pt:min);
                 });
                 const offset = ( previous.close - min.price )/( max.price - min.price );
-                console.log(`${symbol}-max:${max.date},${max.price}-min:${min.date},${min.price}`);
+                //console.log(`${symbol}-max:${max.date},${max.price}-min:${min.date},${min.price}`);
 
                 setData({
                     points: newpoints,
@@ -59,33 +63,6 @@ function IntradayQuoteChart(props) {
                 setData(initData);
             }
         }
-        /*const newdata = [];
-        if ( previous !== null && intraday !== null && intraday.length > 0 ) {
-            console.log( data.length + "," + intraday.length );
-
-            let max = previous.close;
-            let min = previous.close;
-            intraday.map( ( quote,i ) => {
-                const point = {
-                    date: new Date(quote.timestamp).getTime(),
-                    price: quote.close,
-                    volume: quote.volume,
-                    volumeUp: 0,
-                    volumeDown: 0
-                }
-                if ( quote.close >= previous.close ) {
-                    point.volumeUp = quote.volume;
-                } else {
-                    point.volumeDown = quote.volume;
-                }
-                max = point.price !== null && point.price > max ? point.price : max;
-                min = point.price !== null && point.price < min ? point.price : min;
-                newdata.push(point);
-            });
-            setOffset(( prev - min )/( max - min ));
-            console.log(`${symbol} - newdata:${newdata.length}`);
-            setData(newdata);
-        }*/
     }, [previous,intraday]);
 
     const prev = previous!=null ? previous.close : 0;
@@ -126,8 +103,8 @@ function IntradayQuoteChart(props) {
                     isAnimationActive={false} stroke="#8884d8" strokeWidth={2} 
                     fill={`url(#splitColor-${symbol})`} />
             </AreaChart>
-
-            <BarChart width={chartWidth} height={100} margin={{top:0,bottom:2,left:0,right:55}}
+            
+            {/*<BarChart width={chartWidth} height={100} margin={{top:0,bottom:2,left:0,right:55}}
                 data={data.points} syncId={`${symbol}-chart`}>
                 <XAxis dataKey="date"
                     type="number"
@@ -137,19 +114,15 @@ function IntradayQuoteChart(props) {
                         return moment(timeValue).format('H:m');
                     }}
                     height={xAxisHeight} padding={{ left: 5, right: 5 }}>
-                    <Label value={`${data.offset},${data.max},${data.min}`}/>
                 </XAxis>
                 <YAxis 
                     tickFormatter={(value) => (value / 1000).toFixed(0) + "k"} 
                     width={yAxisWidth} padding={{top:5,bottom:5}}/>
                 <CartesianGrid />
                 <Tooltip content={<VolumeToolTip prevClose={prev}/>} />
-                <Bar id={`bar-vol-down-${symbol}`} dataKey="volumeDown" stackId="vol" fill="red" isAnimationActive={false} />
-                <Bar id={`bar-vol-up-${symbol}`} dataKey="volumeUp" stackId="vol" fill="green" isAnimationActive={false} />
-                {/*
-                <Bar dataKey="volume" stackId="vol" fill="grey" isAnimationActive={false} />
-                */}
-            </BarChart>
+                <Bar id={`bar-vol-down-${symbol}`} dataKey="volumeDown" barSize="10" stackId="vol" fill="red" isAnimationActive={false} />
+                <Bar id={`bar-vol-up-${symbol}`}   dataKey="volumeUp"   barSize="10" stackId="vol" fill="green" isAnimationActive={false} />
+                </BarChart>*/}
         </>
     );
 
